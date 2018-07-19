@@ -1,0 +1,103 @@
+<head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+body{
+  background-color: E8CCEC;
+  padding: 10% 20% 10% 20%
+}
+.outbox{
+  height:80%;
+  padding:10% 10% 10% 10%;
+  background-color: E1ACE8;
+  border-style: solid;
+  border-color: 850995;
+}
+.but{
+  text-align:center;
+}
+ul{
+  width:100%;
+  height:80%;
+  border-style: solid;
+  border-color: 650995;
+}
+li{
+  text-align: center;
+}
+</style>
+<script>
+var i;
+
+function asign(elm){
+  i=elm;
+}
+
+function del(){
+          var id_number = i;
+           console.log( id_number );
+          $.ajax({
+            url: '/polls/deleteques/',
+       data: {
+         'id_number': id_number
+       },
+       dataType: 'json',
+       success: function (data) {
+         if (data.is_deleted) {
+           setTimeout(function(){// wait for 5 secs(2)
+           location.reload(); // then reload the page.(3)
+      }, 500);
+         }
+       }
+       });
+       $("#myModal").modal("hide");
+}
+
+</script>
+</head>
+<body>
+<div class='outbox'>
+{% csrf_token %}
+{% if question_list %}
+{% for question in question_list %}
+
+    <a href="/polls/{{ question.id }}/">{{ question.question_text }}</a>
+    <a href="/polls/editques/{{question.id}}/" class="btn" name='Edit'> Edit</a>
+
+    <button type="button" onclick='asign(this.id)' id={{question.id}} class="btn btn-info" data-toggle="modal" data-target="#myModal" data-backdrop="true">Delete</button>
+    <br>
+  {% endfor %}
+
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+<br>
+<div class='but'>
+<a href="/polls/addnew/"><button type='button' class="btn btn-info" name='Add new'> Add New</button></a>
+</div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Basic Modal </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h3>Are you sure?</h3>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No Close</button>
+        <button type="button" class="btn btn-primary" id='detele()' onclick="del();">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>

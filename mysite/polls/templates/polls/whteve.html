@@ -1,0 +1,10 @@
+<h1>Add your question </h1>
+{%if error %}
+    <h6>{{error}}</h6>
+{%endif%}
+<form method='POST'>
+  {% csrf_token %}
+<textarea name="ques" id="ques" value='ques' placeholder="Add your question.." maxlength="200"></textarea>
+<br><input type="submit" name="addedques" value='SUBMIT'>
+<input type="reset" name='reset' value='RESET'>
+</form>
